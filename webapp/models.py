@@ -1,0 +1,85 @@
+from django.db import models
+
+# Create your models here.
+
+class Member(models.Model):
+    """Class Member."""
+    phone = models.CharField(max_length=20)
+    birthday = models.DateField()
+    address = models.CharField(max_length=100)
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    SUIT_CHOICES = {
+        ('TENOR', 'Tenor'),
+        ('ALTO', 'Alto'),
+        ('BAIXO', 'Baixo'),
+        ('SOPRANO', 'Soprano'),
+        ('BARITONO', 'Baritono'),
+    }
+    suit = models.CharField(
+        max_length=20,
+        choices=SUIT_CHOICES,
+        default='TENOR'
+    )
+    created_at = models.DateField()
+
+    def __str__(self) -> str:
+        return f'{self.user.username} - {self.suit}'
+
+class Event(models.Model):
+    """Class Event."""
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=100)
+    date = models.DateField()
+    location = models.CharField(max_length=100)
+    updated_at = models.DateField()
+
+    def __str__(self) -> str:
+        return self.name
+    
+class Notice(models.Model):
+    """Class Notice."""
+    description = models.CharField(max_length=100)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    created_at = models.DateField()
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Music(models.Model):
+    """Class Music."""
+    name = models.CharField(max_length=30)
+    author = models.CharField(max_length=30)
+    cover = models.ImageField(upload_to='covers/', blank=True, null=True)
+    year = models.DateField()
+    letter = models.TextField()
+    created_at = models.DateField()
+    members = models.ManyToManyField(Member, through='MusicMember')
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class MusicMember(models.Model):
+    """Class MusicMember."""
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    music = models.ForeignKey(Music, on_delete=models.CASCADE)
+    created_at = models.DateField()
+    class Meta:
+        unique_together = ('member', 'music')
+
+
+    def __str__(self) -> str:
+        return self.member.user.username + ' - ' + self.music.name
+    
+class File(models.Model):
+    """Class File."""
+    name = models.CharField(max_length=30)
+    #file = models.FileField(upload_to='files/', blank=True, null=True)
+    url = models.CharField(max_length=150, blank=True, null=True)
+    created_at = models.DateField()
+    music = models.ForeignKey(Music, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+    

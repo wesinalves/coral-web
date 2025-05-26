@@ -1,0 +1,220 @@
+{% extends 'admin.html' %}
+
+{% block title %}
+Múcisas
+{% endblock title %}
+
+{% block breadcrumb %}
+<!-- Base Breadcrumb Template -->
+<nav class="flex px-4 pt-4" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-2">
+        <!-- Home Link (Always present) -->
+        <li>
+            <a href="{% url 'index' %}" class="text-gray-500 hover:text-gray-700">
+                <!-- Home Icon -->
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                </svg>
+            </a>
+        </li>
+
+        {% for breadcrumb in breadcrumbs %}
+            <li class="flex items-center">
+                <!-- Separator -->
+                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                
+                {% if not forloop.last %}
+                    <!-- Link for intermediate pages -->
+                    <a href="{{ breadcrumb.url }}" 
+                       class="ml-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+                        {{ breadcrumb.title }}
+                    </a>
+                {% else %}
+                    <!-- Current page (no link) -->
+                    <span class="ml-2 text-sm font-medium text-gray-900">
+                        {{ breadcrumb.title }}
+                    </span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<main class="p-6 bg-gray-100 flex-1 overflow-y-auto">
+    <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full">    
+        <div class="p-3 flex flex-col">
+            {% for music in page_obj %}
+            <div class="mb-4 flex justify-between">
+                <div class="flex space-x-2 items-center">
+                    <div>
+                        {% if music.cover %}
+                        <img src="{{ music.cover.url }}" alt="{{ music.name }}" class="w-9 h-9 rounded-lg object-cover">
+                        {% else %}
+                        <img src="covers/music-cover.jpeg" alt="{{ music.name }}" class="w-9 h-9 rounded-lg object-cover">
+                        {% endif %}
+                    </div>
+                
+                    <div class="flex flex-col">
+                        <h2 class="text-lg font-semibold text-gray-800">{{ music.name }}</h2>
+                        <h3 class="text-md text-gray-500">{{ music.author }}</h3>
+                    </div>
+                </div>
+    
+                <div class="flex items-center gap-1">
+                    <a href="{% url 'music_detail' music.id %}" class="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i data-feather="heart" class="w-3 h-3"></i>
+                    </a>
+                    <a href="{% url 'music_detail' music.id %}" class="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i data-feather="more-horizontal" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </div>           
+            {% endfor %}
+        </div>
+        {% comment %} pagination {% endcomment %}
+        <div class="bg-gray-100 px-6 py-4 flex justify-between items-center">
+            <div class="text-gray-600">
+                Mostrando {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} páginas
+            </div>
+            <div class="flex items-center gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="{% url 'events' %}?page=1" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Primeira
+                    </a>
+                    <a href="{% url 'events' %}?page={{page_obj.previous_page_number}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        <
+                    </a>
+                {% endif %}
+
+                <div class="flex items-center gap-2">
+                    <button class="px-4 py-2 bg-gray-300 text-white rounded-lg hover:bg-gray-400 transition">
+                        {{ page_obj.number }}
+                    </button>
+                </div>
+
+                {% if page_obj.has_next %}
+                    <a href="{% url 'events' %}?page={{page_obj.next_page_number}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        >
+                    </a>
+                    <a href="{% url 'events' %}?page={{page_obj.paginator.num_pages}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Última
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal -->
+<div id="modal" 
+    class="fixed inset-0 z-50 hidden overflow-auto bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <!-- Modal Content -->
+    <div class="bg-white rounded-lg p-8 max-w-md mx-auto relative">
+        <!-- Close Button -->
+        <button 
+            onclick="closeModal()"
+            class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 focus:outline-none">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <!-- Alert Content -->
+        <div class="text-center">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Quer deletar este item?</h3>
+            <p class="text-sm text-gray-500 mb-6">
+                {% comment %} You can use Django template variables here {% endcomment %}
+                Essa operação não poderá ser desfeita.
+            </p>
+            
+            <!-- Action Buttons -->
+            <div class="flex justify-center space-x-4">
+                <button 
+                    onclick="confirmAction()"
+                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    Confirmar
+                </button>
+                <button 
+                    onclick="closeModal()"
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(idEvent) {
+        const modal = document.getElementById('modal');
+        modal.dataset.idEvent = idEvent
+        modal.classList.remove('hidden');
+        // Prevent background scrolling
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.add('hidden');
+        // Restore background scrolling
+        document.body.style.overflow = 'auto';
+    }
+
+    function confirmAction() {
+        // Add your confirmation logic here
+        console.log('Confirmed!');
+        const modal = document.getElementById('modal');
+        const idEvent = modal.dataset.idEvent;
+        
+        // Example of using Django's csrf_token with fetch:
+        
+        // Example of using Django's csrf_token with fetch
+        fetch(`/delete_event/${idEvent}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id_event: idEvent,
+                // Add any other data you need to send
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle success
+            console.log('Success:', data);
+            closeModal();
+            // Optionally reload or update the page
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle error
+        });
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('modal');
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    });
+</script>
+
+{% endblock content %}

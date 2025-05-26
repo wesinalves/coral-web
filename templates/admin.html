@@ -1,0 +1,126 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coral Jovem Asa Norte Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+
+</head>
+<body class="bg-gray-100 h-screen font-sans antialiased leading-none">
+
+    <!-- Sidebar -->
+    <div class="flex h-screen">
+        <aside class="hidden md:flex md:flex-col w-64 bg-indigo-800 text-white flex-shrink-0">
+            <div class="p-4">
+                <h2 class="text-xl font-semibold">Coral Jovem Asa Norte Dashboard</h2>
+            </div>
+            <nav>
+                <a href="/" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                    <i data-feather="grid" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                    <i data-feather="calendar" class="w-5 h-5"></i>
+                    <span>Agenda</span>
+                </a>
+                <a href="#" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                    <i data-feather="alert-circle" class="w-5 h-5"></i>
+                    <span>Avisos</span>
+                </a>
+                <a href="{% url 'musics' %}" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                    <i data-feather="music" class="w-5 h-5"></i>
+                    <span>Músicas</span>
+                </a>
+                <a href="#" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                    <i data-feather="user" class="w-5 h-5"></i>
+                    <span>Perfil</span>
+                </a>
+                <a href="{% url 'logout' %}" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                    <i data-feather="log-out" class="w-5 h-5"></i>
+                    <span>Sair</span>
+                </a>
+            </nav>
+        </aside>
+
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top Navbar -->
+            <header class="bg-indigo-800 md:bg-white shadow p-4 flex flex-wrap justify-between items-center">
+                <div class="flex text-white space-x-2 items-center md:text-black">
+                    <button onclick="toggleMenu()" class="md:hidden">
+                        <i data-feather="align-justify" class="w-7 h-7"></i>
+                    </button>
+                    <h1 class="text-xl font-semibold">
+                        {% block title %}
+                        {% endblock title %}
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-white md:text-gray-700">Admin</span>
+                </div>
+
+                <div class="w-full block flex-grow hidden md:hidden" id="mobile-menu">
+                    <div class="text-xl">
+                        <a href="{% url 'logout' %}" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                            <i data-feather="log-out" class="w-5 h-5"></i>
+                            <span>Sair</span>
+                        </a>
+                    </div>
+                  </div>
+            </header>
+
+            {% block breadcrumb %}
+            
+            {% endblock breadcrumb %}
+
+            <!-- Page Content -->
+            {% block content %}
+
+            {% endblock content %}
+
+            <!--Mobile menu-->
+
+            <footer class="bottom-0 border-t-2 border-indigo-800 bg-white p-1 shadow h-16 flex flex-wrap justify-between items-center md:hidden">
+                <a href="/" class="block py-2 text-indigo-300 {% if request.path == '/' %} bg-indigo-700 text-white {% endif %}  flex flex-col space-y-1 items-center p-1">
+                    <i data-feather="grid" class="w-5 h-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="block py-2 text-indigo-300  {% if request.path == '/calendar' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                    <i data-feather="calendar" class="w-5 h-5"></i>
+                    <span>Agenda</span>
+                </a>
+
+                <a href="#" class="block py-2 text-indigo-300  {% if request.path == '/alerts' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                    <i data-feather="alert-circle" class="w-5 h-5"></i>
+                    <span>Avisos</span>
+                </a>
+                <a href="{% url 'musics' %}" class="block py-2 text-indigo-300  {% if request.path == '/musics' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                    <i data-feather="music" class="w-5 h-5"></i>
+                    <span>Músicas</span>
+                </a>
+                <a href="#" class="block py-2 text-indigo-300  {% if request.path == '/profile' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                    <i data-feather="user" class="w-5 h-5"></i>
+                    <span>Perfil</span>
+                </a>
+            </footer>
+            
+        </div>
+    </div>
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle("hidden")
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    
+    <div class="fixed top-0 left-0 right-0 bg-indigo-600 shadow-md z-50 p-3 justify-items-center">
+        <header class="w-full max-w-4xl flex flex-row justify-between">
+            <div class="text-white font-bold text-xl">Acampmax</div>
+            <div class="text-white text-sm"><a href="/">Login</a></div>
+        </header>
+    </div>
+    
+
+    <div class="w-full max-w-xl bg-white shadow-lg rounded-xl overflow-hidden">
+        <div class="bg-indigo-600 text-white p-6">
+            <h2 class="text-2xl font-bold">Formulário de cadastro</h2>
+            <p class="text-indigo-100">para organizadores</p>
+        </div>
+       
+        <form class="p-8 space-y-6 mt-1" action="{% url 'register' %}" method='post'>
+            {% csrf_token %}
+            {{ form }}
+            <!--
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2" for="firstName">
+                        First Name <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="firstName" 
+                        required 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your first name"
+                    >
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2" for="lastName">
+                        Last Name <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="lastName" 
+                        required 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your last name"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2" for="email">
+                    Email Address <span class="text-red-500">*</span>
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="you@example.com"
+                >
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2" for="phone">
+                    Phone Number
+                </label>
+                <input 
+                    type="tel" 
+                    id="phone" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="(000) 000-0000"
+                >
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2" for="ticketType">
+                    Select Ticket Type <span class="text-red-500">*</span>
+                </label>
+                <select 
+                    id="ticketType" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <option value="">Choose your ticket</option>
+                    <option value="early">Early Bird - $299</option>
+                    <option value="regular">Regular - $399</option>
+                    <option value="vip">VIP Access - $599</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">
+                    Dietary Requirements
+                </label>
+                <div class="space-y-2">
+                    <label class="inline-flex items-center">
+                        <input 
+                            type="checkbox" 
+                            class="form-checkbox text-blue-600"
+                            value="vegetarian"
+                        >
+                        <span class="ml-2">Vegetarian</span>
+                    </label>
+                    <label class="inline-flex items-center ml-6">
+                        <input 
+                            type="checkbox" 
+                            class="form-checkbox text-blue-600"
+                            value="vegan"
+                        >
+                        <span class="ml-2">Vegan</span>
+                    </label>
+                    <label class="inline-flex items-center ml-6">
+                        <input 
+                            type="checkbox" 
+                            class="form-checkbox text-blue-600"
+                            value="gluten-free"
+                        >
+                        <span class="ml-2">Gluten Free</span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2" for="additionalNotes">
+                    Additional Notes
+                </label>
+                <textarea 
+                    id="additionalNotes" 
+                    rows="4" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Any special requirements or additional information"
+                ></textarea>
+            </div>
+
+            <div class="flex items-center">
+                <input 
+                    type="checkbox" 
+                    id="termsAgree" 
+                    required 
+                    class="mr-2 text-blue-600 focus:ring-blue-500"
+                >
+                <label for="termsAgree" class="text-gray-700">
+                    I agree to the terms and conditions
+                </label>
+            </div>
+            -->
+            <div>
+                <button 
+                    type="submit" 
+                    class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300 font-semibold mb-3"
+                >
+                    Cadastrar
+                </button>
+            </div>
+            
+        </form>
+    </div>
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+    </script>
+</body>
+</html>
