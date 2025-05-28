@@ -12,7 +12,11 @@ class MusicAdmin(admin.ModelAdmin):
     search_fields = ['name', 'author']
     inlines = [FilesInline]
 
+class EventAdmin(admin.ModelAdmin):
+    list_display = ['name', 'date', 'location']
+    search_fields = ['name', 'date', 'location']
+
 admin.site.register(Member)
-admin.site.register(Event)
+admin.site.register(Event, EventAdmin)
 admin.site.register(Notice)
 admin.site.register(Music, MusicAdmin)
