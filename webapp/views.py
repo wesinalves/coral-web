@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout, authenticate
-from .models import Music
+from .models import Music, Event, Notice
 from django.core.paginator import Paginator
 
 # Create your views here.
@@ -79,3 +79,16 @@ def music_detail(request, music_id):
     files = music.file_set.all()  # Assuming you have a File model related to Music
     context = {'music': music, 'breadcrumbs': breadcrumbs, 'files': files}
     return render(request, 'music_detail.html', context)
+
+@login_required
+def calendar(request):
+    """Show calendar."""
+    breadcrumbs = [
+        {'title': 'Home', 'url': reverse('index')},
+        {'title': 'Agenda', 'url': None},
+    ]
+
+    events = Event.objects.all().order_by('-date')[:7]
+
+    context = {'breadcrumbs': breadcrumbs, 'events': events}
+    return render(request, 'calendar.html', context)
