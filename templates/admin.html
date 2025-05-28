@@ -102,7 +102,7 @@
                     <i data-feather="alert-circle" class="w-5 h-5"></i>
                     <span>Avisos</span>
                 </a>
-                <a href="{% url 'musics' %}" class="block py-2 text-indigo-300  {% if request.path == '/musics' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                <a href="{% url 'musics' %}" class="block py-2 text-indigo-300  {% if request.path == '/musics' or request.path == '/music_detail' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
                     <i data-feather="music" class="w-5 h-5"></i>
                     <span>Músicas</span>
                 </a>
