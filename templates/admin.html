@@ -93,7 +93,7 @@
                     <i data-feather="grid" class="w-5 h-5"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="block py-2 text-indigo-300  {% if request.path == '/calendar' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                <a href="{% url 'calendar' %}" class="block py-2 text-indigo-300  {% if request.path == '/calendar' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
                     <i data-feather="calendar" class="w-5 h-5"></i>
                     <span>Agenda</span>
                 </a>
@@ -102,7 +102,7 @@
                     <i data-feather="alert-circle" class="w-5 h-5"></i>
                     <span>Avisos</span>
                 </a>
-                <a href="{% url 'musics' %}" class="block py-2 text-indigo-300  {% if request.path == '/musics' or request.path == '/music_detail' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                <a href="{% url 'musics' %}" class="block py-2 text-indigo-300  {% if request.path == '/musics' or request.resolver_match.view_name == 'music_detail' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
                     <i data-feather="music" class="w-5 h-5"></i>
                     <span>Músicas</span>
                 </a>
