@@ -75,10 +75,21 @@ class MusicMember(models.Model):
 class File(models.Model):
     """Class File."""
     name = models.CharField(max_length=30)
-    #file = models.FileField(upload_to='files/', blank=True, null=True)
+    #file = models.FileField(upload_to='files/')
     url = models.CharField(max_length=150, blank=True, null=True)
     created_at = models.DateField()
     music = models.ForeignKey(Music, on_delete=models.CASCADE)
+    TYPE_CHOICES = {
+        ('audio', 'Audio'),
+        ('partitura', 'Partitura'),
+        ('letra', 'Letra'),
+        ('cifra', 'Cifra'),
+    }
+    type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES,
+        default='TENOR'
+    )
 
     def __str__(self) -> str:
         return self.name
