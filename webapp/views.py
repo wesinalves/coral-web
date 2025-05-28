@@ -71,9 +71,11 @@ def musics(request):
 def music_detail(request, music_id):
     """Show details of a specific music."""
     breadcrumbs = [
-        {'name': 'Home', 'url': reverse('index')},
-        {'name': 'Musics', 'url': reverse('musics')},
+        {'title': 'Home', 'url': reverse('index')},
+        {'title': 'Musics', 'url': reverse('musics')},
+        {'title': 'Detalhes', 'url': None},
     ]
     music = get_object_or_404(Music, id=music_id)
-    context = {'music': music, 'breadcrumbs': breadcrumbs}
+    files = music.file_set.all()  # Assuming you have a File model related to Music
+    context = {'music': music, 'breadcrumbs': breadcrumbs, 'files': files}
     return render(request, 'music_detail.html', context)
