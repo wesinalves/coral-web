@@ -10,6 +10,8 @@ urlpatterns = [
     
     path('musics', views.musics, name='musics'),
     path('musics/<int:music_id>', views.music_detail, name='music_detail'),
+
+    path('calendar', views.calendar, name='calendar'),
     
     # path('users', views.users, name='users'),
     
