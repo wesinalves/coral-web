@@ -26,19 +26,21 @@
                     <span>Dashboard</span>
                 </a>
                 
-                <a href="#" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                <a href="{% url 'calendar' %}" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
                     <i data-feather="calendar" class="w-5 h-5"></i>
                     <span>Agenda</span>
                 </a>
-                <a href="#" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+
+                {% comment %} <a href="#" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
                     <i data-feather="alert-circle" class="w-5 h-5"></i>
                     <span>Avisos</span>
-                </a>
+                </a> {% endcomment %}
+
                 <a href="{% url 'musics' %}" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
                     <i data-feather="music" class="w-5 h-5"></i>
                     <span>Músicas</span>
                 </a>
-                <a href="#" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
+                <a href="{% url 'profile' %}" class="block py-2 px-4 text-indigo-300 hover:bg-indigo-700 hover:text-white flex space-x-2 items-center">
                     <i data-feather="user" class="w-5 h-5"></i>
                     <span>Perfil</span>
                 </a>
@@ -106,7 +108,7 @@
                     <i data-feather="music" class="w-5 h-5"></i>
                     <span>Músicas</span>
                 </a>
-                <a href="#" class="block py-2 text-indigo-300  {% if request.path == '/profile' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                <a href="{% url 'profile' %}" class="block py-2 text-indigo-300  {% if request.path == '/profile' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
                     <i data-feather="user" class="w-5 h-5"></i>
                     <span>Perfil</span>
                 </a>
