@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Member(models.Model):
@@ -20,6 +20,7 @@ class Member(models.Model):
         choices=SUIT_CHOICES,
         default='TENOR'
     )
+    terms_agreed = models.BooleanField(default=False)
     created_at = models.DateField()
 
     def __str__(self) -> str:
