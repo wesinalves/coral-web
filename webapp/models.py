@@ -23,7 +23,11 @@ class Member(User):
     created_at = models.DateField()
 
     def __str__(self) -> str:
-        return f'{self.user.username} - {self.suit}'
+        return f'{self.username} - {self.suit}'
+    
+    class Meta:
+        verbose_name = "Membro"
+        verbose_name_plural = "Membros"
 
 class Event(models.Model):
     """Class Event."""
