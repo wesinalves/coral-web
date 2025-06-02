@@ -18,7 +18,7 @@ urlpatterns = [
     # path('users', views.users, name='users'),
     
     path('profile', views.profile, name='profile'),
-    # path('edit-profile', views.edit_profile, name='edit_profile'),
+    path('edit-profile', views.edit_profile, name='edit_profile'),
     # path('success', views.success, name='success'),
     # path('cancel', views.cancel, name='cancel'),
 
