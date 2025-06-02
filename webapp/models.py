@@ -2,12 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
-class Member(models.Model):
+class Member(User):
     """Class Member."""
     phone = models.CharField(max_length=20)
     birthday = models.DateField()
     address = models.CharField(max_length=100)
-    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     SUIT_CHOICES = {
         ('TENOR', 'Tenor'),
         ('ALTO', 'Alto'),
@@ -20,7 +19,7 @@ class Member(models.Model):
         choices=SUIT_CHOICES,
         default='TENOR'
     )
-    terms_agreed = models.BooleanField(default=False)
+    #terms_agreed = models.BooleanField(default=False)
     created_at = models.DateField()
 
     def __str__(self) -> str:
