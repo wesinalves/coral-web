@@ -100,10 +100,10 @@
                     <span>Agenda</span>
                 </a>
 
-                <a href="#" class="block py-2 text-indigo-300  {% if request.path == '/alerts' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
+                {% comment %} <a href="#" class="block py-2 text-indigo-300  {% if request.path == '/alerts' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
                     <i data-feather="alert-circle" class="w-5 h-5"></i>
                     <span>Avisos</span>
-                </a>
+                </a> {% endcomment %}
                 <a href="{% url 'musics' %}" class="block py-2 text-indigo-300  {% if request.path == '/musics' or request.resolver_match.view_name == 'music_detail' %} bg-indigo-700 text-white {% endif %} flex flex-col space-y-1 items-center p-1">
                     <i data-feather="music" class="w-5 h-5"></i>
                     <span>Músicas</span>
