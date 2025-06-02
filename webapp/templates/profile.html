@@ -1,0 +1,156 @@
+{% extends 'admin.html' %}
+{% load filters %}
+
+{% block title %}
+Perfil
+{% endblock title %}
+
+{% block breadcrumb %}
+<!-- Base Breadcrumb Template -->
+<nav class="flex px-4 pt-4" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-2">
+        <!-- Home Link (Always present) -->
+        <li>
+            <a href="{% url 'index' %}" class="text-gray-500 hover:text-gray-700">
+                <!-- Home Icon -->
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                </svg>
+            </a>
+        </li>
+
+        {% for breadcrumb in breadcrumbs %}
+            <li class="flex items-center">
+                <!-- Separator -->
+                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                
+                {% if not forloop.last %}
+                    <!-- Link for intermediate pages -->
+                    <a href="{{ breadcrumb.url }}" 
+                       class="ml-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+                        {{ breadcrumb.title }}
+                    </a>
+                {% else %}
+                    <!-- Current page (no link) -->
+                    <span class="ml-2 text-sm font-medium text-gray-900">
+                        {{ breadcrumb.title }}
+                    </span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<main class="p-6 flex-1 overflow-y-auto">
+    <div class="flex space-x-3">
+    
+        <a href="{% url 'edit_profile' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg flex items-center gap-2 transition mb-3 w-44">
+            <i data-feather="info" class="w-5 h-5"></i>
+            <span>Editar dados</span>
+        </a>
+        <a href="{% url 'index' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg flex items-center gap-2 transition mb-3 w-46">
+            <i data-feather="lock" class="w-5 h-5"></i>
+            <span>Alterar Senha</span>
+        </a>
+    </div>
+    {% if not member.phone %}
+    <div class="flex items-center space-x-3 bg-red-100 p-4 rounded-xl mb-3">
+      <div class="flex items-center justify-center w-10 h-5 rounded-full bg-red-100">
+        <i data-feather="alert-circle" class="w-5 h-5 text-red-600"></i>
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+          Por favor, complete seu cadastro.
+      </p>
+    </div>
+    {% endif %}
+    <!-- Content -->
+    <div class="mx-auto bg-white rounded-xl shadow-md overflow-hidden w-full">
+
+    <div class="p-6 space-y-4">
+        <!-- Nome de usuário -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-100">
+            <i data-feather="log-in" class="w-5 h-5 text-red-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Nome de usuário</p>
+            <p class="text-base font-semibold text-gray-900">{{ user.username }}</p>
+          </div>
+        </div>
+        <!-- Nome -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100">
+            <i data-feather="user" class="w-5 h-5 text-blue-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Nome</p>
+            <p class="text-base font-semibold text-gray-900">{{ user.first_name }} {{user.last_name}}</p>
+          </div>
+        </div>
+  
+        <!-- Email -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100">
+            <i data-feather="mail" class="w-5 h-5 text-green-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Email</p>
+            <p class="text-base font-semibold text-gray-900">{{ user.email }}</p>
+          </div>
+        </div>
+
+        <!-- Telefone -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-100">
+            <i data-feather="phone" class="w-5 h-5 text-purple-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Phone</p>
+            <p class="text-base font-semibold text-gray-900">{{ member.phone }}</p>
+          </div>
+        </div>
+
+        <!-- Nascimento -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-100">
+            <i data-feather="calendar" class="w-5 h-5 text-red-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Data Nascimento</p>
+            <p class="text-base font-semibold text-gray-900">{{ member.birthday }}</p>
+          </div>
+        </div>
+
+        <!-- Nascimento -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100">
+            <i data-feather="home" class="w-5 h-5 text-blue-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Endereço</p>
+            <p class="text-base font-semibold text-gray-900">{{ member.address }}</p>
+          </div>
+        </div>
+
+        <!-- Nascimento -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100">
+            <i data-feather="clipboard" class="w-5 h-5 text-green-600"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Naipe</p>
+            <p class="text-base font-semibold text-gray-900">{{ member.suit }}</p>
+          </div>
+        </div>
+
+      </div>
+    
+    </div>
+</main>
+
+{% endblock content %}
