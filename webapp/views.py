@@ -83,7 +83,7 @@ def profile(request):
     ]
 
     try:
-        member = Member.objects.get(user_id=request.user.id)
+        member = Member.objects.get(id=request.user.id)
     except Member.DoesNotExist:
         member = None
 
@@ -102,17 +102,36 @@ def edit_profile(request):
         {'title': 'Editar Perfil', 'url': None},
     ]
     try:
-        logged_user = Member.objects.get(user_id=request.user.id)
+        logged_user = Member.objects.get(id=request.user.id)
     except Member.DoesNotExist:
         logged_user = get_object_or_404(User, id=request.user.id)
 
-    if request.method == 'POST':
+    if request.method != 'POST':
         form = ProfileForm(instance=logged_user)
     else:
         form = ProfileForm(request.POST, instance=logged_user)
         if form.is_valid():
-            form.save()
-            return redirect('profile')
+            user = form.save(commit=False)
+
+            # quando ainda não há cadastro de membro
+            try:
+                member = Member.objects.get(email = form.cleaned_data['email'])
+            except:
+                member = Member(id=user.id)
+                member.phone = form.cleaned_data['phone']
+                member.birthday = form.cleaned_data['birthday']
+                member.address = form.cleaned_data['address']
+                member.suit = form.cleaned_data['suit']
+                member.created_at = datetime.today().strftime('%Y-%m-%d')
+                member.save()
+            
+            
+            user.save()
+
+            return HttpResponseRedirect(reverse('profile'))
+        
+    context = {'breadcrumbs':breadcrumbs, 'form': form}
+    return render(request, 'edit_profile.html', context)
         
 
 def register(request):
@@ -127,7 +146,7 @@ def register(request):
             user.save()
             return HttpResponseRedirect(reverse('index'))
         else:
-            print(form.cleaned_data.get("photo"))
+            print(form.cleaned_data.get("formulário não é válido"))
     
     context = {'form': form}
 
