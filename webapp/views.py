@@ -9,6 +9,7 @@ from .models import Music, Event, Notice, Member, User
 from django.core.paginator import Paginator
 from .forms import RegisterForm, ProfileForm
 from datetime import datetime
+from django.contrib import messages
 
 # Create your views here.
 
@@ -132,6 +133,32 @@ def edit_profile(request):
         
     context = {'breadcrumbs':breadcrumbs, 'form': form}
     return render(request, 'edit_profile.html', context)
+
+
+@login_required
+def edit_password(request):
+    breadcrumbs = [
+        {'title': 'Home', 'url': reverse('index')},
+        {'title': 'Perfil', 'url': reverse('profile')},
+        {'title': 'Editar Senha', 'url': None},
+    ]
+    try:
+        logged_user = Member.objects.get(id=request.user.id)
+    except Member.DoesNotExist:
+        logged_user = get_object_or_404(User, id=request.user.id)
+
+    if request.method == 'POST':
+        if  request.POST['new_password1'] == request.POST['new_password2']:
+            logged_user.password = make_password(request.POST['new_password1'])
+            logged_user.save()
+            messages.success(request, "Senha alterada com sucesso!")
+            return HttpResponseRedirect(reverse('profile'))
+        else:
+            messages.error(request, "As senhas não conferem. Tente novamente.")
+            return HttpResponseRedirect(reverse('edit_password'))
+        
+    context = {'breadcrumbs':breadcrumbs }
+    return render(request, 'edit_password.html', context)
         
 
 def register(request):
