@@ -10,6 +10,7 @@ urlpatterns = [
     
     path('musics', views.musics, name='musics'),
     path('musics/<int:music_id>', views.music_detail, name='music_detail'),
+    path('musics/favorite/<int:music_id>', views.favorite_music, name='favorite_music'),
 
     path('register', views.register, name='register'),
 
