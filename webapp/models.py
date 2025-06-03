@@ -68,13 +68,14 @@ class MusicMember(models.Model):
     """Class MusicMember."""
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     music = models.ForeignKey(Music, on_delete=models.CASCADE)
-    created_at = models.DateField()
+    favorited = models.BooleanField(default=False)
+    hits = models.IntegerField(default=0)
     class Meta:
         unique_together = ('member', 'music')
 
 
     def __str__(self) -> str:
-        return self.member.user.username + ' - ' + self.music.name
+        return self.member.username + ' - ' + self.music.name
     
 class File(models.Model):
     """Class File."""
