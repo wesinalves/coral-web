@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout, authenticate
-from .models import Music, Event, Notice, Member, User
+from .models import Music, Event, Notice, Member, User, MusicMember
 from django.core.paginator import Paginator
 from .forms import RegisterForm, ProfileForm
 from datetime import datetime
@@ -35,7 +35,11 @@ def musics(request):
         {'title': 'Musicas', 'url': reverse('musics')},
     ]
     try:
+        my_musics = []
         musics = Music.objects.all()
+        favorited_musics = MusicMember.objects.filter(favorited=True, member_id=request.user.id)
+        for music in favorited_musics:
+            my_musics.append(music.music.id)
         paginator = Paginator(musics, NUMROWS)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)        
@@ -45,7 +49,8 @@ def musics(request):
     
     context = {
         'page_obj': page_obj, 
-        'breadcrumbs': breadcrumbs
+        'breadcrumbs': breadcrumbs,
+        'my_musics': my_musics,
     }
     return render(request, 'musics.html', context)
 
@@ -178,4 +183,21 @@ def register(request):
     context = {'form': form}
 
     return render(request, 'register.html', context)
+
+@login_required
+def favorite_music(request, music_id):
+    music = get_object_or_404(Music, id=music_id)
+    try:
+        musicmember = MusicMember.objects.get(music_id=music_id, member_id=request.user.id)
+    except:
+        musicmember = MusicMember()
+        musicmember.music_id = music.id
+        musicmember.member_id = request.user.id
+    
+    musicmember.favorited = True
+    musicmember.save()
+    messages.success(request, "Música salva em seus favoritos")
+
+    return HttpResponseRedirect(reverse('musics'))
+    
     
