@@ -46,6 +46,18 @@ Múcisas
 {% block content %}
 
 <main class="p-6 bg-gray-100 flex-1 overflow-y-auto">
+    {% if messages %}
+        <ul class="mx-4 mb-4 list-disc">
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <li class="text-md text-red-500">{{ message }}</li>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <li class="text-md text-blue-500">{{ message }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% endif %}
     <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full">    
         <div class="p-3 flex flex-col">
             {% for music in page_obj %}
@@ -66,9 +78,15 @@ Múcisas
                 </div>
     
                 <div class="flex items-center gap-1">
-                    <a href="{% url 'music_detail' music.id %}" class="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    {% if music.id in my_musics  %}
+                    <a href="{% url 'favorite_music' music.id %}" class="px-2 py-2 bg-gray-200 text-white rounded-lg hover:bg-gray-300 transition">
                         <i data-feather="heart" class="w-3 h-3"></i>
                     </a>
+                    {% else %}
+                    <a href="{% url 'favorite_music' music.id %}" class="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i data-feather="heart" class="w-3 h-3"></i>
+                    </a>
+                    {% endif %}
                     <a href="{% url 'music_detail' music.id %}" class="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                         <i data-feather="more-horizontal" class="w-3 h-3"></i>
                     </a>
@@ -83,10 +101,10 @@ Múcisas
             </div>
             <div class="flex items-center gap-2">
                 {% if page_obj.has_previous %}
-                    <a href="{% url 'events' %}?page=1" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <a href="{% url 'musics' %}?page=1" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                         Primeira
                     </a>
-                    <a href="{% url 'events' %}?page={{page_obj.previous_page_number}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <a href="{% url 'musics' %}?page={{page_obj.previous_page_number}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                         <
                     </a>
                 {% endif %}
@@ -98,10 +116,10 @@ Múcisas
                 </div>
 
                 {% if page_obj.has_next %}
-                    <a href="{% url 'events' %}?page={{page_obj.next_page_number}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <a href="{% url 'musics' %}?page={{page_obj.next_page_number}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                         >
                     </a>
-                    <a href="{% url 'events' %}?page={{page_obj.paginator.num_pages}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <a href="{% url 'musics' %}?page={{page_obj.paginator.num_pages}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                         Última
                     </a>
                 {% endif %}
