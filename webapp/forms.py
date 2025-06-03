@@ -47,4 +47,4 @@ class ProfileForm(forms.ModelForm):
             "birthday" : forms.DateInput(attrs={"placeholder":"Dt. Nascimento", "class":"w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", "type": "date"}, format=('%Y-%m-%d')), 
             "address" : forms.TextInput(attrs={"placeholder":"Endereço", "class":"w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"}), 
             "suit" : forms.Select(attrs={"placeholder":"Naipe", "class":"w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"}), 
-        }
+        }    
