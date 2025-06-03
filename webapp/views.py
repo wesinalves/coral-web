@@ -194,9 +194,14 @@ def favorite_music(request, music_id):
         musicmember.music_id = music.id
         musicmember.member_id = request.user.id
     
-    musicmember.favorited = True
+    if musicmember.favorited == True:
+        musicmember.favorited = False
+        messages.success(request, "Música removida de seus favoritos")
+    else:
+        musicmember.favorited = True
+        messages.success(request, "Música salva em seus favoritos")
+
     musicmember.save()
-    messages.success(request, "Música salva em seus favoritos")
 
     return HttpResponseRedirect(reverse('musics'))
     
