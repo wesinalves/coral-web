@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout', views.logout_view, name='logout'),
     
     path('musics', views.musics, name='musics'),
+    path('favorited', views.favorited, name='favorited'),
     path('musics/<int:music_id>', views.music_detail, name='music_detail'),
     path('musics/favorite/<int:music_id>', views.favorite_music, name='favorite_music'),
 
