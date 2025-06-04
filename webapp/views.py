@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from .forms import RegisterForm, ProfileForm
 from datetime import datetime
 from django.contrib import messages
+from django.db.models import Count, Sum
 
 # Create your views here.
 
@@ -17,7 +18,39 @@ NUMROWS=10
 
 @login_required
 def index(request):
-    return render(request, 'index.html')
+    my_musics = MusicMember.objects.filter(member_id=request.user.id)
+    num_my_musics = len(my_musics)
+    num_musics = len(Music.objects.all())
+    
+    # como pegar a média das músicas ??? num_hits / num_total_hits / N * 100
+    results = (MusicMember.objects
+              .values('member_id')
+              .annotate(dcount=Sum('hits'))
+              .order_by()
+            )
+    
+    summation = 0
+    for result in results:
+        summation += result['dcount']
+
+    di = 0
+    for music in my_musics:
+        di += music.hits
+
+    try:
+        dc = summation / len(results) # desempenho coletivo
+        di_dc = round((di / dc) * 100, 2)
+    except Exception as e:
+        print(e)
+        di_dc = 0
+
+    context = {
+        'num_my_musics': num_my_musics,
+        'num_musics': num_musics,
+        'di_dc': di_dc,
+    }
+
+    return render(request, 'index.html', context)
 
 @login_required
 def logout_view(request):
@@ -53,6 +86,32 @@ def musics(request):
         'my_musics': my_musics,
     }
     return render(request, 'musics.html', context)
+
+
+@login_required
+def favorited(request):
+    """List all musics favorited."""
+    breadcrumbs = [
+        {'title': 'Home', 'url': reverse('index')},
+        {'title': 'Musicas Favoritas', 'url': reverse('musics')},
+    ]
+    try:
+        my_musics = []
+        favorited_musics = MusicMember.objects.filter(favorited=True, member_id=request.user.id)
+        for music in favorited_musics:
+            my_musics.append(Music.objects.get(id=music.music.id))
+        paginator = Paginator(my_musics, NUMROWS)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)        
+    except Music.DoesNotExist:
+        my_musics = None
+        page_obj = None
+    
+    context = {
+        'page_obj': page_obj, 
+        'breadcrumbs': breadcrumbs,
+    }
+    return render(request, 'favorited.html', context)
 
 @login_required
 def music_detail(request, music_id):
