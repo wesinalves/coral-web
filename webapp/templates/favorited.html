@@ -1,0 +1,122 @@
+{% extends 'admin.html' %}
+
+{% block title %}
+Múcisas Favoritas
+{% endblock title %}
+
+{% block breadcrumb %}
+<!-- Base Breadcrumb Template -->
+<nav class="flex px-4 pt-4" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-2">
+        <!-- Home Link (Always present) -->
+        <li>
+            <a href="{% url 'index' %}" class="text-gray-500 hover:text-gray-700">
+                <!-- Home Icon -->
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                </svg>
+            </a>
+        </li>
+
+        {% for breadcrumb in breadcrumbs %}
+            <li class="flex items-center">
+                <!-- Separator -->
+                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                
+                {% if not forloop.last %}
+                    <!-- Link for intermediate pages -->
+                    <a href="{{ breadcrumb.url }}" 
+                       class="ml-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+                        {{ breadcrumb.title }}
+                    </a>
+                {% else %}
+                    <!-- Current page (no link) -->
+                    <span class="ml-2 text-sm font-medium text-gray-900">
+                        {{ breadcrumb.title }}
+                    </span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<main class="p-6 bg-gray-100 flex-1 overflow-y-auto">
+    {% if messages %}
+        <ul class="mx-4 mb-4 list-disc">
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <li class="text-md text-red-500">{{ message }}</li>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <li class="text-md text-blue-500">{{ message }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full">    
+        <div class="p-3 flex flex-col">
+            {% for music in page_obj %}
+            <div class="mb-4 flex justify-between">
+                <div class="flex space-x-2 items-center">
+                    <div>
+                        {% if music.cover %}
+                        <img src="{{ music.cover.url }}" alt="{{ music.name }}" class="w-9 h-9 rounded-lg object-cover">
+                        {% else %}
+                        <img src="covers/music-cover.jpeg" alt="{{ music.name }}" class="w-9 h-9 rounded-lg object-cover">
+                        {% endif %}
+                    </div>
+                
+                    <div class="flex flex-col">
+                        <h2 class="text-lg font-semibold text-gray-800">{{ music.name }}</h2>
+                        <h3 class="text-md text-gray-500">{{ music.author }}</h3>
+                    </div>
+                </div>
+    
+                <div class="flex items-center gap-1">
+                    <a href="{% url 'music_detail' music.id %}" class="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <i data-feather="more-horizontal" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </div>           
+            {% endfor %}
+        </div>
+        {% comment %} pagination {% endcomment %}
+        <div class="bg-gray-100 px-6 py-4 flex justify-between items-center">
+            <div class="text-gray-600">
+                Mostrando {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} páginas
+            </div>
+            <div class="flex items-center gap-2">
+                {% if page_obj.has_previous %}
+                    <a href="{% url 'musics' %}?page=1" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Primeira
+                    </a>
+                    <a href="{% url 'musics' %}?page={{page_obj.previous_page_number}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        <
+                    </a>
+                {% endif %}
+
+                <div class="flex items-center gap-2">
+                    <button class="px-4 py-2 bg-gray-300 text-white rounded-lg hover:bg-gray-400 transition">
+                        {{ page_obj.number }}
+                    </button>
+                </div>
+
+                {% if page_obj.has_next %}
+                    <a href="{% url 'musics' %}?page={{page_obj.next_page_number}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        >
+                    </a>
+                    <a href="{% url 'musics' %}?page={{page_obj.paginator.num_pages}}" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Última
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
