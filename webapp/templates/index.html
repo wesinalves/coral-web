@@ -10,22 +10,17 @@ Dashboard
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <!-- Card 1 -->
         <div class="bg-white p-4 rounded-lg shadow">
-            <h2 class="text-lg font-semibold">Inscritos</h2>
-            <p class="text-gray-600">Total: {{total_campers}}</p>
+            <h2 class="text-lg font-semibold">Nível</h2>
+            <p class="text-gray-600">{{num_my_musics}} / {{ num_musics}}</p>
         </div>
         <!-- Card 2 -->
         <div class="bg-white p-4 rounded-lg shadow">
-            <h2 class="text-lg font-semibold">Capacidade Total</h2>
-            <p class="text-gray-600">Total: {{quantity_users}}</p>
-        </div>
-        <!-- Card 3 -->
-        <div class="bg-white p-4 rounded-lg shadow">
-            <h2 class="text-lg font-semibold">Eventos</h2>
-            <p class="text-gray-600">Total: {{total_events}}</p>
+            <h2 class="text-lg font-semibold">DI-DC</h2>
+            <p class="text-gray-600">{{di_dc}}%</p>
         </div>
     </div>
     
-    <p class="Text-md font-bold mt-4">Últimos inscritos</p>
+    <p class="Text-md font-bold mt-4">Nova música</p>
 
     <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full mt-4">
         <div class="p-6 overflow-x-auto">
@@ -48,7 +43,7 @@ Dashboard
         </div>
     </div>
 
-    <p class="Text-md font-bold mt-4">Últimas transações
+    <p class="Text-md font-bold mt-4">Próximo compromisso
     </p>
 
     <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full mt-4">
