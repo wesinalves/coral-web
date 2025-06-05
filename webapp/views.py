@@ -8,9 +8,10 @@ from django.contrib.auth import login, logout, authenticate
 from .models import Music, Event, Notice, Member, User, MusicMember
 from django.core.paginator import Paginator
 from .forms import RegisterForm, ProfileForm
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib import messages
 from django.db.models import Count, Sum
+from django.db.models import Q
 
 # Create your views here.
 
@@ -20,7 +21,12 @@ NUMROWS=10
 def index(request):
     my_musics = MusicMember.objects.filter(member_id=request.user.id)
     num_my_musics = len(my_musics)
-    num_musics = len(Music.objects.all())
+    musics = Music.objects.all().order_by("-created_at")
+    num_musics = len(musics)
+    delta = timedelta(days=30)
+    start = datetime.today().strftime('%Y-%m-%d')
+    end = (datetime.today()+delta).strftime('%Y-%m-%d')
+    last_event = Event.objects.filter(date__range=(start,end)).order_by("date")[0]
     
     # como pegar a média das músicas ??? num_hits / num_total_hits / N * 100
     results = (MusicMember.objects
@@ -48,6 +54,8 @@ def index(request):
         'num_my_musics': num_my_musics,
         'num_musics': num_musics,
         'di_dc': di_dc,
+        'last_music': musics[0],
+        'last_event':last_event,
     }
 
     return render(request, 'index.html', context)
