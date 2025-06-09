@@ -8,6 +8,18 @@ Dashboard
 {% block content %}
 
 <main class="p-6 bg-gray-100 flex-1 overflow-y-auto">
+    {% if messages %}
+        <ul class="mx-4 mb-4 list-disc">
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <li class="text-md text-red-500">{{ message }}</li>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <li class="text-md text-blue-500">{{ message }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% endif %}
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <!-- Card 1 -->
         <div class="bg-white p-4 rounded-lg shadow">
