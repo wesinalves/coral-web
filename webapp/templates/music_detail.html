@@ -46,6 +46,18 @@ Múcisas
 {% block content %}
 
 <main class="p-6 bg-gray-100 flex-1 overflow-y-auto">
+    {% if messages %}
+        <ul class="mx-4 mb-4 list-disc">
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <li class="text-md text-red-500">{{ message }}</li>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <li class="text-md text-blue-500">{{ message }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% endif %}
     <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full">    
         <div class="p-3 flex flex-col">
             <div class="mb-4 flex justify-between">
@@ -74,19 +86,24 @@ Múcisas
             </iframe>
         {% endif %}
         {% if item.type == "partitura" %}
-            <a href="{{ item.url }}" class="px-2 py-2 bg-blue-600 text-lg text-white rounded-lg hover:bg-blue-700 flex space-x-2 items-center transition mb-3 w-full h-12">
+            <a href="{{ item.url }}" class="px-2 py-2 bg-gray-900 text-lg text-white rounded-lg hover:bg-gray-700 flex space-x-2 items-center transition mt-3 w-full h-12">
                 <i data-feather="music" class="w-7 h-7"></i>
                 <span>{{ item.name }}</span>
             </a>
         {% endif %}
         {% if item.type == "letra" %}
-            <a href="{{ item.url }}" class="px-2 py-2 bg-blue-600 text-lg text-white rounded-lg hover:bg-blue-700 flex space-x-2 items-center transition mb-3 w-full h-12">
+            <a href="{{ item.url }}" class="px-2 py-2 bg-gray-900 text-lg text-white rounded-lg hover:bg-gray-700 flex space-x-2 items-center transition mt-3 w-full h-12">
                 <i data-feather="file-text" class="w-7 h-7"></i>
                 <span>{{ item.name }}</span>
             </a>
         {% endif %}
     {% endfor %}
     </div>
+
+    <a href="#" onclick="openModal({{music.id}})" class="px-2 py-2 bg-indigo-600 text-lg text-white rounded-lg hover:bg-indigo-700 flex space-x-2 items-center transition mt-3 w-full h-12">
+        <i data-feather="headphones" class="w-7 h-7"></i>
+        <span>Confirmar ensaio</span>
+    </a>
     
 </main>
 
@@ -106,17 +123,17 @@ Múcisas
 
         <!-- Alert Content -->
         <div class="text-center">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Quer deletar este item?</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Parabéns, continue assim!</h3>
             <p class="text-sm text-gray-500 mb-6">
                 {% comment %} You can use Django template variables here {% endcomment %}
-                Essa operação não poderá ser desfeita.
+                Toda vez que você ouvir algum kit, pode confirmar aqui.
             </p>
             
             <!-- Action Buttons -->
             <div class="flex justify-center space-x-4">
                 <button 
                     onclick="confirmAction()"
-                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                     Confirmar
                 </button>
                 <button 
@@ -130,9 +147,9 @@ Múcisas
 </div>
 
 <script>
-    function openModal(idEvent) {
+    function openModal(idMusic) {
         const modal = document.getElementById('modal');
-        modal.dataset.idEvent = idEvent
+        modal.dataset.idMusic = idMusic
         modal.classList.remove('hidden');
         // Prevent background scrolling
         document.body.style.overflow = 'hidden';
@@ -149,21 +166,20 @@ Múcisas
         // Add your confirmation logic here
         console.log('Confirmed!');
         const modal = document.getElementById('modal');
-        const idEvent = modal.dataset.idEvent;
-        
+        const idMusic = modal.dataset.idMusic;
+        let formData = new FormData()
+        formData.append('music_id', idMusic)
         // Example of using Django's csrf_token with fetch:
         
         // Example of using Django's csrf_token with fetch
-        fetch(`/delete_event/${idEvent}`, {
+        //fetch(`/listen_music/${idMusic}`, {
+        fetch(`/listen-music`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/json',
+                //'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                id_event: idEvent,
-                // Add any other data you need to send
-            })
+            body: formData,
         })
         .then(response => response.json())
         .then(data => {
