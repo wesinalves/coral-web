@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required, permission_required
@@ -10,8 +10,7 @@ from django.core.paginator import Paginator
 from .forms import RegisterForm, ProfileForm
 from datetime import datetime, timedelta
 from django.contrib import messages
-from django.db.models import Count, Sum
-from django.db.models import Q
+from django.db.models import Count, Sum, F
 
 # Create your views here.
 
@@ -271,5 +270,24 @@ def favorite_music(request, music_id):
     musicmember.save()
 
     return HttpResponseRedirect(reverse('musics'))
+
+
+@login_required
+def listen_music(request):
+    if request.method == "POST":
+        music_id = request.POST.get("music_id", False)        
+        music = get_object_or_404(Music, id=music_id)
+        try:
+            musicmember = MusicMember.objects.get(music_id=music_id, member_id=request.user.id)
+        except:
+            musicmember = MusicMember()
+            musicmember.music_id = music.id
+            musicmember.member_id = request.user.id
+
+        musicmember.hits = F("hits") + 1
+        messages.success(request, "Ensaio confirmado com sucesso!")
+        musicmember.save()
+        return JsonResponse({"status": "Success"})
+
     
     
