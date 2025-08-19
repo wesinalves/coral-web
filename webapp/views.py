@@ -259,7 +259,7 @@ def favorite_music(request, music_id):
         member = Member.objects.get(id=request.user.id)
     except:
         messages.error(request,"Por favor, conclua seu cadastro para usar essa função.")
-        HttpResponseRedirect(reverse('musics'))
+        return HttpResponseRedirect(reverse('musics'))
     try:
         musicmember = MusicMember.objects.get(music_id=music_id, member_id=member.id)
     except:
