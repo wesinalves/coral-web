@@ -192,6 +192,8 @@ Múcisas
         .catch((error) => {
             console.error('Error:', error);
             // Handle error
+            closeModal();
+            window.location.reload();
         });
     }
 
