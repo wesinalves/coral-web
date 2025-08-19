@@ -25,8 +25,10 @@ def index(request):
     delta = timedelta(days=30)
     start = datetime.today().strftime('%Y-%m-%d')
     end = (datetime.today()+delta).strftime('%Y-%m-%d')
-    last_event = Event.objects.filter(date__range=(start,end)).order_by("date")[0]
-    
+    try: 
+        last_event = Event.objects.filter(date__range=(start,end)).order_by("date")[0] # se não tiver evento vai dar erro
+    except:
+        last_event = Event.objects.all().order_by('date')[0]
     # como pegar a média das músicas ??? num_hits / num_total_hits / N * 100
     results = (MusicMember.objects
               .values('member_id')
