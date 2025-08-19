@@ -18,7 +18,7 @@ NUMROWS=10
 
 @login_required
 def index(request):
-    my_musics = MusicMember.objects.filter(member_id=request.user.id)
+    my_musics = MusicMember.objects.filter(member_id=request.user.id, hits__gt=0)
     num_my_musics = len(my_musics)
     musics = Music.objects.all().order_by("-created_at")
     num_musics = len(musics)
