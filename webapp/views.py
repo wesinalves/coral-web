@@ -289,14 +289,16 @@ def listen_music(request):
         except:
             messages.error(request,"Por favor, conclua seu cadastro para usar essa função.")
             return JsonResponse({"status": "Error"})
+        
         try:
             musicmember = MusicMember.objects.get(music_id=music_id, member_id=member.id)
+            musicmember.hits = F("hits") + 1
         except:
             musicmember = MusicMember()
             musicmember.music_id = music.id
             musicmember.member_id = member.id
+            musicmember.hits = 1
 
-        musicmember.hits = F("hits") + 1
         messages.success(request, "Ensaio confirmado com sucesso!")
         musicmember.save()
         return JsonResponse({"status": "Success"})
