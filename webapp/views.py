@@ -288,13 +288,13 @@ def listen_music(request):
             member = Member.objects.get(id=request.user.id)
         except:
             messages.error(request,"Por favor, conclua seu cadastro para usar essa função.")
-            return HttpResponseRedirect(reverse('musics', args=[music.id]))
+            return JsonResponse({"status": "Error"})
         try:
-            musicmember = MusicMember.objects.get(music_id=music_id, member_id=request.user.id)
+            musicmember = MusicMember.objects.get(music_id=music_id, member_id=member.id)
         except:
             musicmember = MusicMember()
             musicmember.music_id = music.id
-            musicmember.member_id = request.user.id
+            musicmember.member_id = member.id
 
         musicmember.hits = F("hits") + 1
         messages.success(request, "Ensaio confirmado com sucesso!")
