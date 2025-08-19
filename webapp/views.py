@@ -284,6 +284,11 @@ def listen_music(request):
     if request.method == "POST":
         music_id = request.POST.get("music_id", False)        
         music = get_object_or_404(Music, id=music_id)
+        try: 
+            member = Member.objects.get(id=request.user.id)
+        except:
+            messages.error(request,"Por favor, conclua seu cadastro para usar essa função.")
+            return HttpResponseRedirect(reverse('musics', args=[music.id]))
         try:
             musicmember = MusicMember.objects.get(music_id=music_id, member_id=request.user.id)
         except:
