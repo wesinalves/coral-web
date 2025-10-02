@@ -62,7 +62,7 @@ Múcisas
         <div class="p-3 flex flex-col">
             {% for music in page_obj %}
             <div class="mb-4 flex justify-between">
-                <div class="flex space-x-2 items-center">
+                <a href="{% url 'music_detail' music.id %}" class="flex space-x-2 items-center w-full">
                     <div>
                         {% if music.cover %}
                         <img src="{{ music.cover.url }}" alt="{{ music.name }}" class="w-9 h-9 rounded-lg object-cover">
@@ -75,7 +75,7 @@ Múcisas
                         <h2 class="text-lg font-semibold text-gray-800">{{ music.name }}</h2>
                         <h3 class="text-md text-gray-500">{{ music.author }}</h3>
                     </div>
-                </div>
+                </a>
     
                 <div class="flex items-center gap-1">
                     {% if music.id in my_musics  %}
