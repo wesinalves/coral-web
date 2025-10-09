@@ -25,6 +25,11 @@ def index(request):
     delta = timedelta(days=30)
     start = datetime.today().strftime('%Y-%m-%d')
     end = (datetime.today()+delta).strftime('%Y-%m-%d')
+    try:
+        member = Member.objects.get(id=request.user.id)
+    except Member.DoesNotExist:
+        member = None
+        
     try: 
         last_event = Event.objects.filter(date__range=(start,end)).order_by("date")[0] # se não tiver evento vai dar erro
     except:
@@ -57,6 +62,7 @@ def index(request):
         'di_dc': di_dc,
         'last_music': musics[0],
         'last_event':last_event,
+        'member': member
     }
 
     return render(request, 'index.html', context)
@@ -78,21 +84,22 @@ def musics(request):
     ]
     try:
         my_musics = []
-        musics = Music.objects.all()
+        musics = Music.objects.all().order_by("name")
         favorited_musics = MusicMember.objects.filter(favorited=True, member_id=request.user.id)
         for music in favorited_musics:
             my_musics.append(music.music.id)
-        paginator = Paginator(musics, NUMROWS)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)        
+        # paginator = Paginator(musics, NUMROWS)
+        # page_number = request.GET.get('page')
+        # page_obj = paginator.get_page(page_number)        
     except Music.DoesNotExist:
         musics = None
         page_obj = None
     
     context = {
-        'page_obj': page_obj, 
+        #'page_obj': page_obj, 
         'breadcrumbs': breadcrumbs,
         'my_musics': my_musics,
+        'musics': musics,
     }
     return render(request, 'musics.html', context)
 
@@ -106,18 +113,19 @@ def favorited(request):
     ]
     try:
         my_musics = []
-        favorited_musics = MusicMember.objects.filter(favorited=True, member_id=request.user.id)
+        favorited_musics = MusicMember.objects.filter(favorited=True, member_id=request.user.id).order_by("music__name")
         for music in favorited_musics:
             my_musics.append(Music.objects.get(id=music.music.id))
-        paginator = Paginator(my_musics, NUMROWS)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)        
+        # paginator = Paginator(my_musics, NUMROWS)
+        # page_number = request.GET.get('page')
+        # page_obj = paginator.get_page(page_number)        
     except Music.DoesNotExist:
         my_musics = None
         page_obj = None
     
     context = {
-        'page_obj': page_obj, 
+        #'page_obj': page_obj, 
+        'my_musics': my_musics,
         'breadcrumbs': breadcrumbs,
     }
     return render(request, 'favorited.html', context)

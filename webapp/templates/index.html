@@ -20,6 +20,16 @@ Dashboard
         {% endfor %}
         </ul>
     {% endif %}
+    {% if not member.phone %}
+    <div class="flex items-center space-x-3 bg-red-100 p-4 rounded-xl mb-3">
+      <div class="flex items-center justify-center w-10 h-5 rounded-full bg-red-100">
+        <i data-feather="alert-circle" class="w-5 h-5 text-red-600"></i>
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+          <a href="{% url 'edit_profile' %}" class="hover:underline">Por favor, complete seu cadastro na tela editar perfil.</a>
+      </p>
+    </div>
+    {% endif %}
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <!-- Card 1 -->
         <div class="bg-white p-4 rounded-lg shadow">

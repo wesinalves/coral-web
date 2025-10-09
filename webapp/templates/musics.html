@@ -60,7 +60,7 @@ Múcisas
     {% endif %}
     <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full">    
         <div class="p-3 flex flex-col">
-            {% for music in page_obj %}
+            {% for music in musics %}
             <div class="mb-4 flex justify-between">
                 <a href="{% url 'music_detail' music.id %}" class="flex space-x-2 items-center w-full">
                     <div>
@@ -94,7 +94,7 @@ Múcisas
             </div>           
             {% endfor %}
         </div>
-        {% comment %} pagination {% endcomment %}
+        {% comment %} pagination 
         <div class="bg-gray-100 px-6 py-4 flex justify-between items-center">
             <div class="text-gray-600">
                 Mostrando {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} páginas
@@ -125,6 +125,7 @@ Múcisas
                 {% endif %}
             </div>
         </div>
+        {% endcomment %}
     </div>
 </main>
 

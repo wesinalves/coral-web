@@ -60,7 +60,7 @@ Múcisas Favoritas
     {% endif %}
     <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full">    
         <div class="p-3 flex flex-col">
-            {% for music in page_obj %}
+            {% for music in my_musics %}
             <div class="mb-4 flex justify-between">
                 <div class="flex space-x-2 items-center">
                     <div>
@@ -84,8 +84,11 @@ Múcisas Favoritas
                 </div>
             </div>           
             {% endfor %}
+            {% if not my_musics %}
+            <div class="text-md">Nenhuma música favorita!</div>
+            {% endif %}
         </div>
-        {% comment %} pagination {% endcomment %}
+        {% comment %} pagination 
         <div class="bg-gray-100 px-6 py-4 flex justify-between items-center">
             <div class="text-gray-600">
                 Mostrando {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} páginas
@@ -116,6 +119,7 @@ Múcisas Favoritas
                 {% endif %}
             </div>
         </div>
+        {% endcomment %}
     </div>
 </main>
 

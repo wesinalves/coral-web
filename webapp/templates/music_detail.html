@@ -60,8 +60,15 @@ Múcisas
     {% endif %}
     <div class="bg-white shadow-lg rounded-lg max-w-sm md:max-w-full">    
         <div class="p-3 flex flex-col">
-            <div class="mb-4 flex justify-between">
-                <div class="flex space-x-2 items-center">                
+            <div class="flex justify-between">
+                <div class="flex space-x-2">
+                    <div>
+                        {% if music.cover %}
+                        <img src="{{ music.cover.url }}" alt="{{ music.name }}" class="w-12 h-12 rounded-lg object-cover">
+                        {% else %}
+                        <img src="covers/music-cover.jpeg" alt="{{ music.name }}" class="w-12 h-12 rounded-lg object-cover">
+                        {% endif %}
+                    </div>                
                     <div class="flex flex-col">
                         <h2 class="text-lg font-semibold text-gray-800">{{ music.name }}</h2>
                         <h3 class="text-md text-gray-500">{{ music.author }}</h3>
